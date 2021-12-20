@@ -1,0 +1,35 @@
+---
+- name: Standalone ESXI playbook
+  hosts: localhost
+  connection: local
+  gather_facts: no
+
+  vars:
+    - ansible_python_interpreter: /usr/local/bin/python3
+
+  vars_files:
+    - vars/esxi_vars.yml
+
+  tasks:
+    - name: Load SOPS Secrets and Include variables
+      community.sops.load_vars:
+        file: esxi.sops.yml
+      environment:
+        SOPS_AGE_KEY_FILE: '~/sops-key.txt'
+
+    - name: Make sure requirements are met to run vmware modules
+      become: true
+      pip:
+        name: PyVmomi
+        state: present
+
+    - name: Manage multiple settings for an ESXi host
+      community.vmware.vmware_host_config_manager:
+        hostname: '{{ vcenter_hostname }}'
+        username: '{{ vcenter_username }}'
+        password: '{{ vcenter_password }}'
+        esxi_hostname: '{{ esxi_hostname }}'
+        validate_certs: False
+        options:
+        'Config.HostAgent.log.level': 'verbose'
+        'Annotations.WelcomeMessage': 'Hello World'

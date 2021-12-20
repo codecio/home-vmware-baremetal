@@ -23,17 +23,6 @@
         name: PyVmomi
         state: present
 
-#    - name: Manage multiple settings for an ESXi host
-#      community.vmware.vmware_host_config_manager:
-#        hostname: '{{ vcenter_hostname }}'
-#        username: '{{ vcenter_username }}'
-#        password: '{{ vcenter_password }}'
-#        esxi_hostname: '{{ esxi_hostname }}'
-#        validate_certs: False
-#        options:
-#          'Config.HostAgent.log.level': 'verbose'
-#          'Annotations.WelcomeMessage': 'Hello World'
-
     - name: Set NTP servers for all ESXi Host in given Cluster
       community.vmware.vmware_host_ntp:
         hostname: '{{ vcenter_hostname }}'
@@ -45,7 +34,17 @@
         ntp_servers:
           - 0.pool.ntp.org
           - 1.pool.ntp.org
-      delegate_to: localhost
+
+    - name: Start ntpd setting for an ESXi Host with Service policy
+      community.vmware.vmware_host_service_manager:
+        hostname: '{{ vcenter_hostname }}'
+        username: '{{ vcenter_username }}'
+        password: '{{ vcenter_password }}'
+        esxi_hostname: '{{ esxi_hostname }}'
+        service_name: ntpd
+        service_policy: on
+        validate_certs: False
+        state: present
 
     - name: Manage multiple settings for an ESXi host
       community.vmware.vmware_host_config_manager:
@@ -55,6 +54,5 @@
         esxi_hostname: '{{ esxi_hostname }}'
         validate_certs: False
         options:
-        'Config.HostAgent.log.level': 'verbose'
-        'Annotations.WelcomeMessage': 'Hello World'
-      delegate_to: localhost
+          'Config.HostAgent.log.level': 'verbose'
+          'Annotations.WelcomeMessage': 'Hello World'

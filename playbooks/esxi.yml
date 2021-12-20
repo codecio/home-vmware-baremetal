@@ -23,6 +23,30 @@
         name: PyVmomi
         state: present
 
+#    - name: Manage multiple settings for an ESXi host
+#      community.vmware.vmware_host_config_manager:
+#        hostname: '{{ vcenter_hostname }}'
+#        username: '{{ vcenter_username }}'
+#        password: '{{ vcenter_password }}'
+#        esxi_hostname: '{{ esxi_hostname }}'
+#        validate_certs: False
+#        options:
+#          'Config.HostAgent.log.level': 'verbose'
+#          'Annotations.WelcomeMessage': 'Hello World'
+
+    - name: Set NTP servers for all ESXi Host in given Cluster
+      community.vmware.vmware_host_ntp:
+        hostname: '{{ vcenter_hostname }}'
+        username: '{{ vcenter_username }}'
+        password: '{{ vcenter_password }}'
+        esxi_hostname: 'redbull'
+        validate_certs: False
+        state: present
+        ntp_servers:
+          - 0.pool.ntp.org
+          - 1.pool.ntp.org
+      delegate_to: localhost
+
     - name: Manage multiple settings for an ESXi host
       community.vmware.vmware_host_config_manager:
         hostname: '{{ vcenter_hostname }}'
@@ -33,3 +57,4 @@
         options:
         'Config.HostAgent.log.level': 'verbose'
         'Annotations.WelcomeMessage': 'Hello World'
+      delegate_to: localhost

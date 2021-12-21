@@ -2,6 +2,8 @@
 
 Simple collection of ansible plays to kickstart an ESXi homelab to host some other home projects like k3s and monitoring tools for small lab rack.
 
+![diagram](https://github.com/codecio/home-vmware-baremetal/blob/main/diagram/simple_standalone_esxi_homelab_with_ubuntu_farm.png)
+
 ## Hardware
 
 | Information| Description |

@@ -1,7 +1,7 @@
 [ubnt]
-ubnt1 ansible_host=192.168.40.100
-ubnt2 ansible_host=192.168.40.101
-ubnt3 ansible_host=192.168.40.102
+ubnt1 ansible_host=192.168.40.11
+ubnt2 ansible_host=192.168.40.12
+ubnt3 ansible_host=192.168.40.13
 
 [ubnt:vars]
 ansible_user=ansible

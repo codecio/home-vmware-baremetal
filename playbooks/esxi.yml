@@ -18,17 +18,17 @@
         SOPS_AGE_KEY_FILE: '~/sops-key.txt'
 
     - name: Make sure requirements are met to run vmware modules
-      become: true
+      become: yes
       pip:
         name: PyVmomi
         state: present
 
     - name: Set NTP servers for all ESXi Host in given Cluster
       community.vmware.vmware_host_ntp:
-        hostname: '{{ vcenter_hostname }}'
-        username: '{{ vcenter_username }}'
-        password: '{{ vcenter_password }}'
-        esxi_hostname: 'redbull'
+        hostname: '{{ esxi_hostname }}'
+        username: '{{ esxi_username }}'
+        password: '{{ esxi_password }}'
+        esxi_hostname: "{{ esxi_hostname }}"
         validate_certs: False
         state: present
         ntp_servers:
@@ -37,9 +37,9 @@
 
     - name: Start ntpd setting for an ESXi Host with Service policy
       community.vmware.vmware_host_service_manager:
-        hostname: '{{ vcenter_hostname }}'
-        username: '{{ vcenter_username }}'
-        password: '{{ vcenter_password }}'
+        hostname: '{{ esxi_hostname }}'
+        username: '{{ esxi_username }}'
+        password: '{{ esxi_password }}'
         esxi_hostname: '{{ esxi_hostname }}'
         service_name: ntpd
         service_policy: on
@@ -48,11 +48,39 @@
 
     - name: Manage multiple settings for an ESXi host
       community.vmware.vmware_host_config_manager:
-        hostname: '{{ vcenter_hostname }}'
-        username: '{{ vcenter_username }}'
-        password: '{{ vcenter_password }}'
+        hostname: '{{ esxi_hostname }}'
+        username: '{{ esxi_username }}'
+        password: '{{ esxi_password }}'
         esxi_hostname: '{{ esxi_hostname }}'
         validate_certs: False
         options:
           'Config.HostAgent.log.level': 'verbose'
           'Annotations.WelcomeMessage': 'Hello World'
+
+    - name: Automatically answer if a question locked a virtual machine
+      block:
+        - name: Power on a virtual machine without the answer param
+          vmware_guest_powerstate:
+            hostname: "{{ esxi_hostname }}"
+            username: "{{ esxi_username }}"
+            password: "{{ esxi_password }}"
+            validate_certs: false
+            folder: "{{ datastore1_folder }}"
+            name: "{{ item }}"
+            state: powered-on
+          loop: "{{ vm_cluster }}"
+
+      rescue:
+        - name: Power on a virtual machine with the answer param
+          vmware_guest_powerstate:
+            hostname: "{{ esxi_hostname }}"
+            username: "{{ esxi_username }}"
+            password: "{{ esxi_password }}"
+            validate_certs: false
+            folder: "{{ datastore1_folder }}"
+            name: "{{ item }}"
+            answer:
+              - question: "msg.uuid.altered"
+                response: "button.uuid.copiedTheVM"
+            state: powered-on
+          loop: "{{ vm_cluster }}"

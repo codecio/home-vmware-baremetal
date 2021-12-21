@@ -1,4 +1,4 @@
-vcenter_password: ENC[AES256_GCM,data:IC9UWJRCAro4dA==,iv:ZY6kj5nQeCrKTU5EzbSENlhSWWer+SmCMQ7x9RzMMxQ=,tag:q5JDrGps8rJlmwn71pBzWQ==,type:str]
+esxi_password: ENC[AES256_GCM,data:15iM1rfuWz7JbA==,iv:kW5sFK+AabPJJjgiD2SVZtztICOsyh2etxh4XxfdTDE=,tag:tLbOqncJaspDxVIoIzRGtw==,type:str]
 sops:
     kms: []
     gcp_kms: []
@@ -8,14 +8,14 @@ sops:
         - recipient: age164vhfzer4edwf66a38ag0vrh74hrxqjrzgajq83ctnn929mr752s0cddv6
           enc: |
             -----BEGIN AGE ENCRYPTED FILE-----
-            YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSBmOTlTYVRkQXlpZ0dlQlB4
-            SFdQQkd5ZnE1cHZ2cklYN3RYeFV1WUk5QW40CjRSQmZXWmR3ZXZza3hycG01T1N4
-            alVJSXRhSGwrMjZSSzAwdFVxR01yMXMKLS0tIDdVc1NZL3g3dENGR01SUDNZRWZC
-            SE1YOS92ayt5NEp0bEcrZmJDWFdCTW8K2EcYOySD0IZX5Y6IsWseomCFuJ/KGgUw
-            n7yYLR1xnsDHogMSegIRPvL4PUVETpXa39anWXihTLLqgzhQ4OuaHw==
+            YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSA3allqUW5YWUZOYndOVEZP
+            REYzaUplMmhzenEvZTJZVUMyNFBNOGpCZ1ZrCkx1YWs3TmpybHRuYU9QWE1PTFpo
+            RllkcUIycXA1bUVGeVlQSDZINngxZTAKLS0tIDhjSmtsRWxseHI2UFNZVmxmUGlw
+            MmJWb2Q4T2FsZ1ZVN1RDTkk1SG9kTG8KGdmnOKI2LXJRDoEoWyLpIOdRJ5E3plQ1
+            /AUdDO8OVz7jDb/CmPz9rSDVkRVxnrHawLGTkjKJ1tW6mM+fncv9Kw==
             -----END AGE ENCRYPTED FILE-----
-    lastmodified: "2021-12-20T20:43:28Z"
-    mac: ENC[AES256_GCM,data:5MznKtrYtIc2k1szeCuSGhU3HlA1ijN8lIAhXKEjhalFRlvnCUY79paESfhH1aSpiOYr2jSuFW117N03hGsmEyKe3uk/l7xn9YZu9UD/z+GQT0Ez01LQIyi0ql9dJ4uBfekeF7iTH9CE32jEYp+hyVTnKMpH3nztihIaimO7MlM=,iv:GIBwgblK0WHEELLx75aCD84y1Rpdg94H5fa+jiT7/XM=,tag:S5CVzCLJH2YXMpAAy0GhYQ==,type:str]
+    lastmodified: "2021-12-21T04:53:45Z"
+    mac: ENC[AES256_GCM,data:OmNg88Eyr3SsQHsMsmdj57bYtr+k+uDsO3vzZhSESiEOFdk8XB406V6Oy62PlmwPIi3gmZ989KCWhVIJBuKzg47wnKyEVn6t7qqkZsLLma6qpQjVXJx4mIYXi6qMOasc4Y9CiZBgUlRMJrH9bC0v8PX0axfvCEAwEC/Alp1FaGM=,iv:QwEDmHgRT5Run4aeJfpGHzqMzRqeMxEk+VCyROOZPgE=,tag:ZKIPkDiJKn4B0xakqfBkJg==,type:str]
     pgp: []
     unencrypted_suffix: _unencrypted
     version: 3.7.1

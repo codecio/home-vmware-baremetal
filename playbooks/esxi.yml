@@ -23,13 +23,25 @@
         name: PyVmomi
         state: present
 
+    - name: Configure ESXi hostname and DNS servers
+      community.vmware.vmware_dns_config:
+        hostname: '{{ esxi_hostname }}'
+        username: '{{ esxi_username }}'
+        password: '{{ esxi_password }}'
+        change_hostname_to: "{{ esxi_short_nane }}"
+        domainname: lab.com
+        dns_servers:
+          - 192.168.50.1
+          - 8.8.8.8
+        validate_certs: false
+
     - name: Set NTP servers for all ESXi Host in given Cluster
       community.vmware.vmware_host_ntp:
         hostname: '{{ esxi_hostname }}'
         username: '{{ esxi_username }}'
         password: '{{ esxi_password }}'
         esxi_hostname: "{{ esxi_hostname }}"
-        validate_certs: False
+        validate_certs: false
         state: present
         ntp_servers:
           - 0.pool.ntp.org
@@ -43,7 +55,7 @@
         esxi_hostname: '{{ esxi_hostname }}'
         service_name: ntpd
         service_policy: on
-        validate_certs: False
+        validate_certs: false
         state: present
 
     - name: Manage multiple settings for an ESXi host
@@ -52,10 +64,49 @@
         username: '{{ esxi_username }}'
         password: '{{ esxi_password }}'
         esxi_hostname: '{{ esxi_hostname }}'
-        validate_certs: False
+        validate_certs: false
         options:
-          'Config.HostAgent.log.level': 'verbose'
+          'Config.HostAgent.log.level': 'info'
           'Annotations.WelcomeMessage': 'Hello World'
+
+    - name: Enable Hyperthreading for an host system
+      community.vmware.vmware_host_hyperthreading:
+        hostname: '{{ esxi_hostname }}'
+        username: '{{ esxi_username }}'
+        password: '{{ esxi_password }}'
+        esxi_hostname: '{{ esxi_hostname }}'
+        validate_certs: false
+        state: enabled
+
+    - name: Set the Power Management Policy of a host system to high-performance
+      community.vmware.vmware_host_powermgmt_policy:
+        hostname: '{{ esxi_hostname }}'
+        username: '{{ esxi_username }}'
+        password: '{{ esxi_password }}'
+        esxi_hostname: '{{ esxi_hostname }}'
+        validate_certs: false
+        policy: high-performance
+
+    - name: Update for system defaults config.
+      community.vmware.vmware_host_auto_start:
+        hostname: '{{ esxi_hostname }}'
+        username: '{{ esxi_username }}'
+        password: '{{ esxi_password }}'
+        esxi_hostname: '{{ esxi_fqdn_name }}'
+        validate_certs: false
+        system_defaults:
+          enabled: true
+          start_delay: 120
+          stop_action: guestShutdown
+
+    - name: Enable and configure SNMP community
+      community.vmware.vmware_host_snmp:
+        hostname: '{{ esxi_hostname }}'
+        username: '{{ esxi_username }}'
+        password: '{{ esxi_password }}'
+        community: '{{ snmpv2_string }}'
+        state: enabled
+        validate_certs: false
 
     - name: Automatically answer if a question locked a virtual machine
       block:
@@ -84,3 +135,40 @@
                 response: "button.uuid.copiedTheVM"
             state: powered-on
           loop: "{{ vm_cluster }}"
+
+    - name: Provide information about a standalone ESXi server
+      community.vmware.vmware_about_info:
+        hostname: '{{ esxi_hostname }}'
+        username: '{{ esxi_username }}'
+        password: '{{ esxi_password }}'
+        validate_certs: false
+      register: esxi_about_info
+
+    - name: output esxi information
+      ansible.builtin.debug:
+        msg: "{{ esxi_about_info }}"
+
+    - name: Add a VMware vSwitch
+      community.vmware.vmware_vswitch:
+        hostname: '{{ esxi_hostname }}'
+        username: '{{ esxi_username }}'
+        password: '{{ esxi_password }}'
+        switch: vSwitch0
+        nics:
+          - vmnic0
+          - vmnic1
+        mtu: 1500
+        validate_certs: false
+
+    - name: Gather firewall facts about ESXi Host
+      community.vmware.vmware_vswitch_info:
+        hostname: '{{ esxi_hostname }}'
+        username: '{{ esxi_username }}'
+        password: '{{ esxi_password }}'
+        esxi_hostname: '{{ esxi_fqdn_name }}'
+        validate_certs: false
+      register: all_vswitch_facts
+
+    - name: output vswitch information
+      ansible.builtin.debug:
+        msg: "{{ all_vswitch_facts }}"

@@ -1,5 +1,7 @@
 ---
 esxi_hostname: '192.168.50.3'
+esxi_fqdn_name: 'redbull.lab.com'
+esxi_short_nane: redbull
 esxi_username: 'root'
 datastore1_folder: 'datastore1'
 vm_name: "ubnt1"

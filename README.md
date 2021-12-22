@@ -45,4 +45,3 @@ When required throw any ESXi secrets in a basic [sops](https://github.com/mozill
 ## TODO
 
 - Figure out why ansible doesn't like custom keys.txt locations. Moved to default for now.
-- Add some mingrammer diagrams.

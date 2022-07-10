@@ -1,0 +1,36 @@
+---
+- name: Reboot ESXi host
+  hosts: localhost
+  connection: local
+  gather_facts: no
+
+  vars:
+    - ansible_python_interpreter: /usr/local/bin/python3
+
+  vars_files:
+    - vars/esxi_vars.yml
+
+  tasks:
+    - name: Load SOPS Secrets and Include variables
+      community.sops.load_vars:
+        file: esxi.sops.yml
+      environment:
+        SOPS_AGE_KEY_FILE: '~/sops-key.txt'
+
+    - name: Make sure requirements are met to run vmware modules
+      become: yes
+      pip:
+        name: PyVmomi
+        state: present
+
+    - name: Set the state of a host system to reboot
+      community.vmware.vmware_host_powerstate:
+        hostname: '{{ esxi_hostname }}'
+        username: '{{ esxi_username }}'
+        password: '{{ esxi_password }}'
+        esxi_hostname: '{{ esxi_hostname }}'
+        state: reboot-host
+        validate_certs: False
+        force: yes
+      delegate_to: localhost
+      register: reboot_host
